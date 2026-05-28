@@ -1,0 +1,137 @@
+local plr = game.Players.LocalPlayer
+local chr = plr.Character or plr.CharacterAdded:Wait()
+local cam = workspace.CurrentCamera
+local offsetgyat = 15
+local TweenService = game:GetService("TweenService")
+local hum = chr:FindFirstChild("Humanoid")
+local Move = true 
+
+-- ⚙️ Tải model từ Asset ID hoặc GitHub
+function LoadCustomInstance(source, parent)
+    local model
+
+    local function NormalizeGitHubURL(url)
+        if url:match("^https://github.com/.+%.rbxm$") and not url:find("?raw=true") then
+            return url .. "?raw=true"
+        end
+        return url
+    end
+
+    while task.wait() and not model do
+        if tonumber(source) then
+            local success, result = pcall(function()
+                return game:GetObjects("rbxassetid://" .. tostring(source))[1]
+            end)
+            if success and result then
+                model = result
+            end
+        elseif typeof(source) == "string" and source:match("^https?://") and source:match("%.rbxm") then
+            local url = NormalizeGitHubURL(source)
+            local success, result = pcall(function()
+                local filename = "temp_" .. math.random(100000, 999999) .. ".rbxm"
+                local content = game:HttpGet(url)
+                if writefile and (getcustomasset or getsynasset) and isfile and delfile then
+                    writefile(filename, content)
+                    local assetFunc = getcustomasset or getsynasset
+                    local obj = game:GetObjects(assetFunc(filename))[1]
+                    delfile(filename)
+                    return obj
+                else
+                    warn("Executor không hỗ trợ file APIs.")
+                    return nil
+                end
+            end)
+            if success and result then
+                model = result
+            end
+        else
+            break
+        end
+
+        if model then
+            model.Parent = parent or workspace
+            for _, obj in ipairs(model:GetDescendants()) do
+                if obj:IsA("Script") or obj:IsA("LocalScript") then
+                    obj:Destroy()
+                end
+            end
+            pcall(function()
+                model:SetAttribute("LoadedByExecutor", true)
+            end)
+        end
+    end
+
+    return model
+end
+
+-- 🔽 Tải Frost entity từ GitHub
+local s = LoadCustomInstance("https://github.com/KendrickFan59/privatev2/blob/main/deerfileversion.rbxm", workspace)
+if not s then
+    warn("Không thể tải Frost entity.")
+    return
+end
+
+-- Change
+coroutine.wrap(function()
+
+for i, v in ipairs(game.Workspace:WaitForChild("Deer God"):GetDescendants()) do
+    if v.Name == "RushNew" then
+        v.Breathing:Destroy()
+        v.Footsteps:Destroy()
+    end
+end
+
+end)()
+
+game.Workspace:WaitForChild("Deer God").RushNew.Footsteps.Volume = 2.5
+game.Workspace:WaitForChild("Deer God").RushNew.Footsteps.PlaybackSpeed = 0.75
+
+function GitAud(soundgit,filename)
+    SoundName=tostring(SoundName)
+    local url=soundgit
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(url))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
+end
+
+function CustomGitSound(soundlink, vol, filename)
+    local S = Instance.new("Sound")
+    S.SoundId = GitAud(soundlink, filename)
+    S.Parent = game.Workspace:WaitForChild("Deer God")
+    S.Volume = 2
+    S:Play()
+end
+
+CustomGitSound("https://github.com/Tinkgy111/Bang/blob/main/followed.mp3?raw=true", 1, "DeerGod")
+wait(5)
+local function Moving(target, dur)
+    local tween_info = TweenInfo.new(dur, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+    local tween = TweenService:Create(Figure.PrimaryPart, tween_info, {CFrame = target})
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+task.spawn(function()
+while Move == true do
+wait(0.01)
+Moving(chr.HumanoidRootPart.CFrame, 1.9)
+end
+end)
+
+task.spawn(function()
+while true do
+wait(math.random(10, 15))
+game.Workspace:WaitForChild("Deer God").Rushnew:SetPrimaryPartCFrame(chr.HumanoidRootPart.CFrame * CFrame.new(math.random(20, 45), 0, math.random(25, 40)))
+end
+end)
+
+game.Workspace:WaitForChild("Deer God").RushNew.Touched:Connect(function()
+	chr.Humanoid:TakeDamage(100)
+	game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Deer God"
+end)
+
+wait(math.random(40, 60))
+Move = false
+Moving(game.Workspace:WaitForChild("Deer God").RushNew.CFrame * CFrame.new(0, -100, 0), 3)
+wait(3)
+game.Workspace:WaitForChild("Deer God"):Destroy()
