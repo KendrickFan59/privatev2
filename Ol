@@ -1,0 +1,46 @@
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Hardcore Initiated",true)
+wait(2) require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Credits To Noonie, Ping, and Zenith",true)
+
+-- Sprint Bar
+loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/Sprint"))()
+
+-- Cease
+coroutine.wrap(function()
+while true do
+wait(325)
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+wait(0)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/KendrickFan59/privatev2/refs/heads/main/ceaser"))()
+end
+
+end)()
+
+-- shocker
+coroutine.wrap(function()
+while true do
+wait(35)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/KendrickFan59/privatev2/refs/heads/main/brand%20old%20shock"))()
+end
+
+end)()
+
+-- ripper
+coroutine.wrap(function()
+while true do
+wait(140)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/KendrickFan59/privatev2/refs/heads/main/rippes"))()
+end
+
+end)()
+
+
+-- frostbite
+
+coroutine.wrap(function()
+while true do
+wait(80)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/KendrickFan59/privatev2/refs/heads/main/frosty"))()
+end
+
+end)()
+
