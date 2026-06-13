@@ -75,7 +75,7 @@ if not s then
 end
 
 local entity = s:FindFirstChildWhichIsA("BasePart")
-entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 5, -15)
+entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 0.5, -15)
 entity.Part.CFrame = entity.CFrame
 
 -- 💡 Thêm ánh sáng mạnh lúc xuất hiện
@@ -107,12 +107,7 @@ tweenservice:Create(frost, TweenInfo.new(10), {
     Contrast = 0.2
 }):Play()
 
--- Tắt hiệu ứng ban đầu
-for _, v in ipairs({"face", "Heylois", "BlackTrai2l", "BlackTrai3l"}) do
-    if entity:FindFirstChild("Attachment") and entity.Attachment:FindFirstChild(v) then
-        entity.Attachment[v].Enabled = false
-    end
-end
+entity.Attachment.Head.Face1.Enabled = false
 
 wait(8)
 
