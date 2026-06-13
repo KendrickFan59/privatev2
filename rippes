@@ -1,0 +1,136 @@
+---====== Load spawner ======---
+local spawner = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"
+))()
+
+---====== Create entity ======---
+local entity = spawner.Create({
+	Entity = {
+		Name = "Ripper",
+		Asset = "rbxassetid://136403182960124",
+		HeightOffset = 0
+	},
+
+	Lights = {
+		Flicker = { Enabled = false },
+		Shatter = true,
+		Repair = false
+	},
+
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {1.5, 20, 0.1, 1}
+	},
+
+	Movement = {
+		Speed = 60,
+		Delay = 6,
+		Reversed = false -- ❗ KHÔNG ĐI TỪ SAU
+	},
+
+	Rebounding = {
+		Enabled = false -- ❗ KHÔNG QUAY ĐẦU
+	},
+
+	Damage = {
+		Enabled = true,
+		Range = 50,
+		Amount = 125
+	},
+
+	Crucifixion = {
+		Enabled = true,
+		Range = 40,
+		Resist = false,
+		Break = true
+	},
+
+	Death = {
+		Type = "Guiding",
+		Hints = {
+			"You died to who you call Ripper.",
+			"This entity is in beta.",
+			"use the strategy you used with the original ripper!",
+			"Hide when you hear it"
+		},
+		Cause = "Ripper"
+	}
+})
+
+----------------------------------------------------------------
+-- 🔧 FIX 1: ÉP SPAWN Ở PHÒNG PHÍA TRƯỚC
+----------------------------------------------------------------
+entity:SetCallback("OnSpawned", function()
+	print("Pepper spawned")
+
+	local rooms = workspace.CurrentRooms:GetChildren()
+	local currentRoom = rooms[#rooms]
+
+	if currentRoom and currentRoom:FindFirstChild("Door")
+	and currentRoom.Door:FindFirstChild("TargetRoom")
+	and currentRoom.Door.TargetRoom.Value then
+
+		local nextRoom = currentRoom.Door.TargetRoom.Value
+		entity.Model:PivotTo(nextRoom.RoomStart.CFrame)
+	end
+
+	-- Màu xanh (KHÔNG QUA ĐỎ)
+	local cc = game.Lighting:FindFirstChild("MainColorCorrection")
+	if not cc then
+		cc = Instance.new("ColorCorrectionEffect", game.Lighting)
+		cc.Name = "MainColorCorrection"
+	end
+
+	cc.TintColor = Color3.fromRGB(255,255,255)
+	cc.Contrast = 0
+
+	game:GetService("TweenService"):Create(
+		cc,
+		TweenInfo.new(2),
+		{ TintColor = Color3.fromRGB(255,0,0) }
+	):Play()
+end)
+
+----------------------------------------------------------------
+-- 🔧 FIX 2: CHỈ ĐI 1 LẦN RỒI BIẾN MẤT
+----------------------------------------------------------------
+entity:SetCallback("OnStartMoving", function()
+	print("Trauma is now Moving.")
+
+	task.delay(8, function()
+		entity:Despawn()
+	end)
+end)
+
+----------------------------------------------------------------
+-- RESET ÁNH SÁNG KHI BIẾN MẤT
+----------------------------------------------------------------
+entity:SetCallback("OnDespawned", function()
+	print("RedPepper despawned")
+
+	local cc = game.Lighting:FindFirstChild("MainColorCorrection")
+	if cc then
+		game:GetService("TweenService"):Create(
+			cc,
+			TweenInfo.new(2),
+			{ TintColor = Color3.fromRGB(255,255,255) }
+		):Play()
+	end
+end)
+
+----------------------------------------------------------------
+-- ❗ GIỮ NGUYÊN JUMPSCARE CỦA BẠN (KHÔNG ĐỤNG)
+----------------------------------------------------------------
+entity:SetCallback("OnDamagePlayer", function(newHealth)
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+  humanoid.Health = 0                 
+	else
+		print("Entity has damaged the player")
+	end
+end)
+
+---====== Run entity ======---
+entity:Run()
