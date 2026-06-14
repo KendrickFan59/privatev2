@@ -68,14 +68,14 @@ function LoadCustomInstance(source, parent)
 end
 
 -- 🔽 Tải Frost entity từ GitHub
-local s = LoadCustomInstance("https://github.com/KendrickFan59/privatev2/blob/main/frostbite2.rbxm", workspace)
+local s = LoadCustomInstance("https://github.com/KendrickFan59/privatev2/blob/main/frostbite2%20(1).rbxm", workspace)
 if not s then
     warn("Không thể tải Frost entity.")
     return
 end
 
 local entity = s:FindFirstChildWhichIsA("BasePart")
-entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 0.5, -15)
+entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 1.5, -15)
 entity.Part.CFrame = entity.CFrame
 
 -- 💡 Thêm ánh sáng mạnh lúc xuất hiện
@@ -107,15 +107,14 @@ tweenservice:Create(frost, TweenInfo.new(10), {
     Contrast = 0.2
 }):Play()
 
-entity.Attachment.Head.Face1.Enabled = false
+entity.Part
 
 wait(8)
 
-entity.Attachment.Head.Face1.Enabled = true
+entity.Part.Attachment.Face1.Enabled = true
 
 -- Phát âm thanh
-pcall(function() entity.Ambience:Play() end)
-pcall(function() entity.AmbienceFar:Play() end)
+pcall(function() entity.Amb:Play() end)
 
 -- 🔥 Gây sát thương nếu không có bật lửa
 local dmg = true
@@ -136,18 +135,11 @@ end)
 game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 dmg = false
 
-entity.Attachment.Head.Face1.Enabled = false
+entity.Part.Attachment.Face1.Enabled = false
 
-pcall(function() entity.Ambience:Stop() end)
-pcall(function() entity.AmbienceFar:Stop() end)
+pcall(function() entity.Amb:Stop() end)
 
--- Âm thanh biến mất
-local des = Instance.new("Sound")
-des.SoundId = "rbxassetid://111715441853991"
-des.Looped = false
-des.Volume = 2.5
-des.Parent = s
-des:Play()
+entity.Part.Despawn:Play()
 
 wait(5)
 s:Destroy()
