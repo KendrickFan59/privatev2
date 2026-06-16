@@ -34,9 +34,9 @@ local function SpawnEntity()
 			Enabled = false
 		},
 		Movement = {
-			Speed = 70,
+			Speed = 100,
 			Delay = 1,
-			Reversed = false
+			Reversed = true
 		},
 		Rebounding = {
 			Enabled = false
