@@ -91,7 +91,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         if ReSt:FindFirstChild("GameStats") then
             local stats = ReSt.GameStats:FindFirstChild("Player_"..Plr.Name)
             if stats then
-                stats.Total.DeathCause.Value = "die to ripper"
+                stats.Total.DeathCause.Value = "Ripper"
             end
         end
         print("[RIPPER] Player killed")
