@@ -5,6 +5,8 @@ local initiator = mainui:WaitForChild("Initiator")
 local main_game = initiator:WaitForChild("Main_Game")
 local caption = require(main_game).caption
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/Sprint"))()
+
 caption("Hardcore Remake By RipperHC Loaded...", true)
 
 local entities = {
